@@ -1,0 +1,95 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "chat",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "4007b617-4b59-40a9-acea-562e28bbcf31",
+      "name": "Webhook",
+      "webhookId": "0296c831-ed9c-4479-9745-e35813547d9a"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n  \"reply\": \"Привет! Я получил твоё сообщение.\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        464,
+        0
+      ],
+      "id": "59c87060-cc38-4b44-9bc9-97afb75eeb4e",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"google/gemma-2-9b-it:free\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"{{ $json.body.message }}\"\n    }\n  ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        224,
+        -128
+      ],
+      "id": "585974c1-2420-4538-b446-14e5662374de",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "BmpCuV95Dr7T30Ki",
+          "name": "Header Auth account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "7b2d67bc-8157-45b5-9218-584446a4a4a6",
+  "meta": {
+    "instanceId": "1052c44bf127c37aeb6a86a7312a7c9eaa121658c6052f1374ae0aff635b258e"
+  },
+  "nodeGroups": [],
+  "id": "kLHOj1bJBTxZtQRr",
+  "tags": []
+}
